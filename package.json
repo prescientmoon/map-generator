@@ -1,0 +1,34 @@
+{
+  "name": "map-generator",
+  "scripts": {
+    "dev": "webpack-dev-server",
+    "build": "cross-env NOE_ENV=production webpack"
+  },
+  "author": {
+    "name": "Alexander T.",
+    "email": "alexander.tarasyuk@outlook.com"
+  },
+  "devDependencies": {
+    "@babel/core": "7.5.5",
+    "@babel/plugin-proposal-class-properties": "7.5.5",
+    "@babel/plugin-proposal-object-rest-spread": "7.5.5",
+    "@babel/preset-env": "7.5.5",
+    "@babel/preset-typescript": "7.3.3",
+    "@types/d3-delaunay": "^4.1.0",
+    "babel-loader": "8.0.6",
+    "cross-env": "^6.0.0",
+    "html-webpack-plugin": "^3.2.0",
+    "typescript": "3.5.3",
+    "webpack": "4.39.2",
+    "webpack-cli": "3.3.7",
+    "webpack-dev-server": "^3.8.1"
+  },
+  "resolutions": {
+    "terser": "3.14.1"
+  },
+  "dependencies": {
+    "d3-delaunay": "^5.1.5",
+    "poisson-disk-sampling": "^1.0.5",
+    "regenerator-runtime": "^0.13.3"
+  }
+}
