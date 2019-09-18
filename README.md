@@ -1,27 +1,12 @@
-# Webpack-TypeScript-Babel
+# Map generator
 
-> This is sample repository demonstrates how to use Webpack, TypeScript and Babel
+This is a basic map generator made in 1 week for the [code community](https://discord.gg/RFPVysw) code jam
+You can check out [the demo]()!
 
-## Building the repo
+# Tehnologies
 
-```shell
-npm run build
-```
+Made with
 
-## Building only types
-
-```shell
-npm run build:types
-```
-
-## Type-Checking the repo
-
-```shell
-npm run type-check
-```
-
-And to run in --watch mode:
-
-```shell
-npm run type-check:watch
-```
+- typescript
+- webpack & babel for bundling & transpiling the assets
+- d3-delaunay for the delaunay triangulation algorithm

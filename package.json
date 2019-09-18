@@ -2,11 +2,14 @@
   "name": "map-generator",
   "scripts": {
     "dev": "webpack-dev-server",
-    "build": "cross-env NOE_ENV=production webpack"
+    "build": "cross-env NOE_ENV=production webpack",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
-  "author": {
-    "name": "Alexander T.",
-    "email": "alexander.tarasyuk@outlook.com"
+  "husky": {
+    "hooks": {
+      "pre-push": "npm run deploy"
+    }
   },
   "devDependencies": {
     "@babel/core": "7.5.5",
@@ -18,6 +21,7 @@
     "babel-loader": "8.0.6",
     "cross-env": "^6.0.0",
     "html-webpack-plugin": "^3.2.0",
+    "husky": "^3.0.5",
     "typescript": "3.5.3",
     "webpack": "4.39.2",
     "webpack-cli": "3.3.7",
