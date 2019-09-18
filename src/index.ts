@@ -41,12 +41,12 @@ const main = async () => {
     renderTriangles(context, delaunay)
   }
 
-  await chunkGenerating(continentChunks, continents, generateTerritory, {
+  chunkGenerating(continentChunks, continents, generateTerritory, {
     allowCollisions: true,
     minimumPoints: 100,
     maximumPoints: 2000
   })
-  await chunkGenerating(islandChunks, islands, generateTerritory, {
+  chunkGenerating(islandChunks, islands, generateTerritory, {
     allowCollisions: false,
     minimumPoints: 4,
     maximumPoints: 20
