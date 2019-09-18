@@ -5,6 +5,7 @@ import { generationOutput } from '../constants/generationOutput'
 
 export interface TerritoryGeneratorOptions {
   debug: boolean
+  fast: boolean
 }
 
 export interface TerritoryOptions {
@@ -15,7 +16,8 @@ export interface TerritoryOptions {
 }
 
 export const defaultTerritoryGeneratorOptions: TerritoryGeneratorOptions = {
-  debug: false
+  debug: false,
+  fast: false
 }
 
 export const defaultTerritoryOptions: TerritoryOptions = {
@@ -81,7 +83,9 @@ export const createTerritoyGenerator = (
       if (factoryOptions.debug) {
         context.stroke()
 
-        await wait(0)
+        if (!factoryOptions.fast) {
+          await wait(0)
+        }
       }
 
       if (
@@ -91,7 +95,9 @@ export const createTerritoyGenerator = (
       ) {
         context.fill()
 
-        await wait(0)
+        if (!factoryOptions.fast) {
+          await wait(0)
+        }
 
         return generationOutput.filled
       }
@@ -101,7 +107,7 @@ export const createTerritoyGenerator = (
       }
     }
 
-    if (!factoryOptions.debug) {
+    if (!(factoryOptions.debug || !factoryOptions.fast)) {
       await wait(0)
     }
 

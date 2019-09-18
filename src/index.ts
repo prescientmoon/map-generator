@@ -14,7 +14,8 @@ const addBorder = true,
 
 const islands = 50,
   continents = 8,
-  continentChunks = 1
+  continentChunks = 1,
+  islandChunks = 1
 
 const width = window.innerWidth,
   height = window.innerHeight,
@@ -29,7 +30,8 @@ const sequence = gaussianPlane(width, height, 5),
   delaunay = Delaunay.from(points)
 
 const generateTerritory = createTerritoyGenerator(context, delaunay, {
-  debug
+  debug,
+  fast: true
 })
 
 const main = async () => {
@@ -44,7 +46,7 @@ const main = async () => {
     minimumPoints: 100,
     maximumPoints: 2000
   })
-  await chunkGenerating(5, islands, generateTerritory, {
+  await chunkGenerating(islandChunks, islands, generateTerritory, {
     allowCollisions: false,
     minimumPoints: 4,
     maximumPoints: 20
