@@ -4,18 +4,37 @@ import { generateBorder } from './helpers/generateBorder'
 import { createTerritoyGenerator } from './helpers/generateTeritory'
 import { createContextCleaner, resize } from './helpers/canvas'
 import { renderTriangles } from './helpers/renderTriangles'
-import { chunkGenerating } from './helpers/efficientGenerating'
+import { Layer, executeLayers } from './helpers/executeLayers'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
 
+context.globalAlpha = 0.5
+context.globalCompositeOperation = 'lighter'
+
 const addBorder = true,
   debug = false
 
-const islands = 50,
-  continents = 8,
-  continentChunks = 1,
-  islandChunks = 1
+const layers: Layer[] = [
+  {
+    chunks: 1,
+    total: 8,
+    options: {
+      allowCollisions: true,
+      minimumPoints: 100,
+      maximumPoints: 2000
+    }
+  },
+  {
+    chunks: 1,
+    total: 50,
+    options: {
+      allowCollisions: false,
+      minimumPoints: 4,
+      maximumPoints: 20
+    }
+  }
+]
 
 const width = window.innerWidth,
   height = window.innerHeight,
@@ -35,22 +54,13 @@ const generateTerritory = createTerritoyGenerator(context, delaunay, {
 })
 
 const main = async () => {
-  clear(width, height, 'blue')
+  clear(width, height, `rgba(0,0,158,1)`)
 
   if (debug) {
     renderTriangles(context, delaunay)
   }
 
-  chunkGenerating(continentChunks, continents, generateTerritory, {
-    allowCollisions: true,
-    minimumPoints: 100,
-    maximumPoints: 2000
-  })
-  chunkGenerating(islandChunks, islands, generateTerritory, {
-    allowCollisions: false,
-    minimumPoints: 4,
-    maximumPoints: 20
-  })
+  executeLayers(layers, generateTerritory, true)
 }
 
 main()

@@ -49,7 +49,7 @@ export const createTerritoyGenerator = (
 
     context.lineWidth = 3
     context.strokeStyle = 'red'
-    context.fillStyle = 'green'
+    context.fillStyle = 'rgba(0,255,0,0.8)'
     context.beginPath()
     context.moveTo(points[currentIndex * 2], points[currentIndex * 2 + 1])
 

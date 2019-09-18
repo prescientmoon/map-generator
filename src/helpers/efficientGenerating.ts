@@ -1,7 +1,7 @@
 import { TerritoryOptions, createTerritoyGenerator } from './generateTeritory'
 import { generationOutput } from '../constants/generationOutput'
 
-export const chunkGenerating = (
+export const generateInChunks = (
   chunks: number,
   total: number,
   generateTerritory: ReturnType<typeof createTerritoyGenerator>,
