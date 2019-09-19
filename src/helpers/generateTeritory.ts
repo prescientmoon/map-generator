@@ -6,6 +6,7 @@ import { generationOutput } from '../constants/generationOutput'
 export interface TerritoryGeneratorOptions {
   debug: boolean
   fast: boolean
+  fill: (context: CanvasRenderingContext2D) => void
 }
 
 export interface TerritoryOptions {
@@ -17,7 +18,10 @@ export interface TerritoryOptions {
 
 export const defaultTerritoryGeneratorOptions: TerritoryGeneratorOptions = {
   debug: false,
-  fast: false
+  fast: false,
+  fill: (context: CanvasRenderingContext2D) => {
+    context.fill()
+  }
 }
 
 export const defaultTerritoryOptions: TerritoryOptions = {
@@ -49,7 +53,7 @@ export const createTerritoyGenerator = (
 
     context.lineWidth = 3
     context.strokeStyle = 'red'
-    context.fillStyle = 'rgba(0,255,0,0.8)'
+    // context.fillStyle = 'rgba(0,255,0,0.8)'
     context.beginPath()
     context.moveTo(points[currentIndex * 2], points[currentIndex * 2 + 1])
 
@@ -93,7 +97,8 @@ export const createTerritoyGenerator = (
         visited.size <= options.maximumPoints &&
         newCurrentIndex === initialIndex
       ) {
-        context.fill()
+        context.closePath()
+        factoryOptions.fill(context)
 
         if (!factoryOptions.fast) {
           await wait(0)

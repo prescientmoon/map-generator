@@ -6,34 +6,41 @@ export interface NoiseLayer {
 }
 
 export interface NoiseOptions {
-  chunkSize: [number, number]
+  offset: number
   smoothnes: number
-}
-
-export const defaultNoiseOptions: NoiseOptions = {
-  chunkSize: [1, 1],
-  smoothnes: 100
+  weight: number
 }
 
 export const createNoiseDataGenerator = (
   context: CanvasRenderingContext2D,
   width = window.innerWidth,
-  height = window.innerHeight
+  height = window.innerHeight,
+  timeOffset = 0
 ) => {
-  const openSimplex = new OpenSimplexNoise(Date.now())
+  const openSimplex = new OpenSimplexNoise(Date.now() + timeOffset)
 
-  return (layers: NoiseLayer[], partialOptions: Partial<NoiseOptions> = {}) => {
-    const options = { ...defaultNoiseOptions, ...partialOptions }
-
+  return (layers: NoiseLayer[], options: NoiseOptions[] = []) => {
     const imageData = context.createImageData(width, height)
+    const totalWeight = options.reduce(
+      (previous, current) => previous + current.weight,
+      0
+    )
 
-    for (let x = 0; x < width; x += options.chunkSize[0]) {
-      for (let y = 0; y < height; y += options.chunkSize[1]) {
+    for (let x = 0; x < width; x++) {
+      for (let y = 0; y < height; y++) {
         const i = (x + y * width) * 4
         const value =
-          (openSimplex.noise2D(x / options.smoothnes, y / options.smoothnes) +
-            1) /
-          2
+          options.reduce((prev: number, current) => {
+            const noise =
+              (openSimplex.noise2D(
+                (current.offset + x) / current.smoothnes,
+                (current.offset + y) / current.smoothnes
+              ) +
+                1) /
+              2
+
+            return prev + current.weight * noise
+          }, 0) / totalWeight
 
         let color: NoiseLayer['color'] = [0, 0, 0, 255]
 
@@ -52,16 +59,16 @@ export const createNoiseDataGenerator = (
       }
     }
 
-    // context.drawImage(imageData,0)
-
     const canvas = new OffscreenCanvas(width, height)
     const offscrenContext = canvas.getContext('2d')!
 
     offscrenContext.putImageData(imageData, 0, 0)
 
     return () => {
+      context.save()
       context.clip()
       context.drawImage(canvas as HTMLCanvasElement, 0, 0, width, height)
+      context.restore()
     }
   }
 }
