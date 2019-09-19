@@ -2,7 +2,7 @@ export const clear = (
   context: CanvasRenderingContext2D,
   width = window.innerWidth,
   height = window.innerHeight,
-  color = 'black'
+  color: string | CanvasGradient = 'black'
 ) => {
   context.fillStyle = color
 
@@ -12,7 +12,7 @@ export const clear = (
 export const createContextCleaner = (context: CanvasRenderingContext2D) => (
   width = window.innerWidth,
   height = window.innerHeight,
-  color = 'black'
+  color: string | CanvasGradient = 'black'
 ) => clear(context, width, height, color)
 
 export const resize = (

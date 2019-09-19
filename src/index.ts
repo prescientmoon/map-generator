@@ -5,6 +5,8 @@ import { createTerritoyGenerator } from './helpers/generateTeritory'
 import { createContextCleaner, resize } from './helpers/canvas'
 import { renderTriangles } from './helpers/renderTriangles'
 import { Layer, executeLayers } from './helpers/executeLayers'
+import { createNoiseDataGenerator, NoiseLayer } from './helpers/noise'
+import { generateGradientNoiseLayers } from './helpers/generateGradientNoiseLayers'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
@@ -37,8 +39,15 @@ const layers: Layer[] = [
 ]
 
 const width = window.innerWidth,
-  height = window.innerHeight,
-  clear = createContextCleaner(context)
+  height = window.innerHeight
+
+const generateNoise = createNoiseDataGenerator(context, width, height)
+const waterLayers = generateGradientNoiseLayers(20, 2, 120)
+
+const water = generateNoise(waterLayers, {
+  chunkSize: [1, 1],
+  smoothnes: 300
+})
 
 resize(canvas, width, height)
 
@@ -54,7 +63,10 @@ const generateTerritory = createTerritoyGenerator(context, delaunay, {
 })
 
 const main = async () => {
-  clear(width, height, `rgba(0,0,158,1)`)
+  // clear(width, height)
+  context.beginPath()
+  context.rect(0, 0, width, height)
+  water()
 
   if (debug) {
     renderTriangles(context, delaunay)

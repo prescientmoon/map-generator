@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "d3-delaunay": "^5.1.5",
+    "open-simplex-noise": "^1.6.0",
     "poisson-disk-sampling": "^1.0.5",
     "regenerator-runtime": "^0.13.3"
   }

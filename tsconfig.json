@@ -10,7 +10,8 @@
     "module": "esnext",
     "strict": true,
     "moduleResolution": "node",
-    "typeRoots": ["typings"]
+    "typeRoots": ["typings"],
+    "lib": ["dom", "dom.iterable", "es2015", "esnext"]
   },
   "include": ["src/**/*", "typings"],
   "exclude": ["node_modules", "dist"]
