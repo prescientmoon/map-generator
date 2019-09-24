@@ -5,14 +5,18 @@ import { createTerritoyGenerator } from './helpers/generateTeritory'
 import { createContextCleaner, resize } from './helpers/canvas'
 import { renderTriangles } from './helpers/renderTriangles'
 import { Layer, executeLayers } from './helpers/executeLayers'
-import { createNoiseDataGenerator, NoiseLayer } from './helpers/noise'
+import {
+  createNoiseDataGenerator,
+  NoiseLayer,
+  NoiseOptions
+} from './helpers/noise'
 import { generateGradientNoiseLayers } from './helpers/generateGradientNoiseLayers'
 
 const canvas = document.getElementById('canvas') as HTMLCanvasElement
 const context = canvas.getContext('2d')!
 
 context.globalAlpha = 0.5
-context.globalCompositeOperation = 'lighter'
+// context.globalCompositeOperation = 'lighter'
 
 const addBorder = true,
   debug = false
@@ -41,13 +45,57 @@ const layers: Layer[] = [
 const width = window.innerWidth,
   height = window.innerHeight
 
-const generateNoise = createNoiseDataGenerator(context, width, height)
-const waterLayers = generateGradientNoiseLayers(20, 2, 120)
+const waterNoiseOptions: NoiseOptions[] = [
+    {
+      smoothnes: 300,
+      offset: 0,
+      weight: 1
+    }
+  ],
+  landNoiseOptions: NoiseOptions[] = [
+    {
+      smoothnes: 10,
+      offset: 0,
+      weight: 1
+    },
+    {
+      smoothnes: 100,
+      offset: 1000,
+      weight: 4
+    },
+    {
+      smoothnes: 50,
+      offset: 2000,
+      weight: 2
+    }
+  ],
+  steps = 20
 
-const water = generateNoise(waterLayers, {
-  chunkSize: [1, 1],
-  smoothnes: 300
+// different offsets
+const generateWaterNoise = createNoiseDataGenerator(context, width, height),
+  generateLandNoise = createNoiseDataGenerator(context, width, height, 1000)
+
+const waterLayers = generateGradientNoiseLayers({
+  minimumSecondaryColor: 0,
+  maximumSecondaryColor: 120,
+
+  mainIndex: 2,
+  steps
 })
+
+const landLayers = generateGradientNoiseLayers({
+  minimumSecondaryColor: 0,
+  maximumSecondaryColor: 30,
+
+  minimumMainColor: 128,
+  maximumMainColor: 200,
+
+  mainIndex: 1,
+  steps
+})
+
+const water = generateWaterNoise(waterLayers, waterNoiseOptions)
+const land = generateLandNoise(landLayers, landNoiseOptions)
 
 resize(canvas, width, height)
 
@@ -59,7 +107,8 @@ const sequence = gaussianPlane(width, height, 5),
 
 const generateTerritory = createTerritoyGenerator(context, delaunay, {
   debug,
-  fast: true
+  fast: true,
+  fill: land
 })
 
 const main = async () => {
@@ -72,7 +121,7 @@ const main = async () => {
     renderTriangles(context, delaunay)
   }
 
-  executeLayers(layers, generateTerritory, true)
+  executeLayers(layers, generateTerritory, false)
 }
 
 main()

@@ -10,3 +10,10 @@ Made with
 - typescript
 - webpack & babel for bundling & transpiling the assets
 - d3-delaunay for the delaunay triangulation algorithm
+
+# Screenshots
+
+A few screenshots from the current state of the project:
+![screenshot](screenshots/1.png)
+![screenshot](screenshots/2.png)
+![screenshot](screenshots/3.png)
